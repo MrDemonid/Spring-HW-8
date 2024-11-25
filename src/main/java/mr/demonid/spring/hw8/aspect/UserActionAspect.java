@@ -48,8 +48,13 @@ public class UserActionAspect {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String userName = auth.getName();
 
+        Object result = null;
         long start = System.currentTimeMillis();
-        Object result = point.proceed();                // выполняем целевой метод
+        try {
+            result = point.proceed();                // выполняем целевой метод
+        } catch (Throwable e) {
+            log.error(e.getMessage());
+        }
         long time = System.currentTimeMillis() - start;
         // делаем отметку о вызове
         log.info("[{}] completed the method: {}.{} in {} ms", userName, clazz, method, time);
