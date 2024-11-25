@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/css/user-style.css}">
+    <title>Личный кабинет</title>
+</head>
+<body>
+<div class="container">
+    <!-- Верхняя часть: Личный кабинет и кнопка Logout -->
+    <div class="header">
+        <h1>Личный кабинет</h1>
+        <a href="/">На главную страницу</a>
+    </div>
+
+    <!-- Основное содержимое страницы -->
+    <div class="row">
+        <!-- Левая часть: Фото пользователя и кнопка Перевести -->
+        <div class="col-left">
+            <img src="/user-photo.jpg" alt="Фото пользователя">
+
+            <!-- Форма для POST-запроса -->
+            <form th:action="@{/begin-transfer}" method="post">
+                <!-- Передача данных пользователя через скрытые поля -->
+                <input type="hidden" name="id" th:value="${user.id}">
+                <input type="hidden" name="username" th:value="${user.username}">
+                <input type="hidden" name="email" th:value="${user.email}">
+                <input type="hidden" name="payId" th:value="${user.payId}">
+                <input type="hidden" name="amount" th:value="${user.amount}">
+
+                <!-- Кнопка для отправки POST-запроса -->
+                <button type="submit" class="btn btn-primary">Перевести</button>
+            </form>
+        </div>
+
+        <!-- Правая часть: Информация о пользователе -->
+        <div class="col-right">
+            <h3>Информация о пользователе</h3>
+            <ul class="list-group">
+                <li class="list-group-item"><strong>ID:</strong> <span th:text="${user.id}"></span></li>
+                <li class="list-group-item"><strong>Имя:</strong> <span th:text="${user.username}"></span></li>
+                <li class="list-group-item"><strong>Email:</strong> <span th:text="${user.email}"></span></li>
+                <li class="list-group-item"><strong>Счёт:</strong> <span th:text="${user.payId}"></span></li>
+                <li class="list-group-item"><strong>Баланс:</strong> <span th:text="${user.amount}"></span></li>
+                <li class="list-group-item"><strong>Права:</strong> <span th:text="${user.roles}"></span></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Нижняя часть: Реклама сайта gb.ru -->
+    <footer>
+        <p>Реклама сайта <a href="https://gb.ru">gb.ru</a></p>
+    </footer>
+</div>
+</body>
+</html>

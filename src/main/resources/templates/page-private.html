@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Список пользователей</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+
+        table, th, td {
+            border: 1px solid #ccc;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f8f8f8;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .button-red {
+            background-color: #f44336;
+        }
+
+        .nav-buttons {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .nav-buttons .button {
+            background-color: #4CAF50;
+        }
+
+        .delete-btn {
+            color: white;
+            background-color: #f44336;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .delete-btn:hover {
+            background-color: #d32f2f;
+        }
+
+    </style>
+</head>
+<body>
+
+<h1>Список пользователей</h1>
+
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Имя пользователя</th>
+        <th>Email</th>
+        <th>Роли</th>
+        <th>Pay ID</th>
+        <th>Сумма</th>
+        <th>Действия</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- Цикл по пользователям -->
+    <tr th:each="user : ${users}">
+        <td th:text="${user.id}">1</td>
+        <td th:text="${user.username}">exampleUser</td>
+        <td th:text="${user.email}">example@example.com</td>
+        <td th:text="${user.roles}">ROLE_USER</td>
+        <td th:text="${user.payId}">123456</td>
+        <td th:text="${user.amount}">100.00</td>
+        <td>
+            <form th:action="@{/delete/{id}(id=${user.id})}" method="post">
+                <button type="submit" class="delete-btn">Удалить</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<div class="nav-buttons">
+    <a href="/" class="button">На главную</a>
+    <a href="/profile" class="button">В личный кабинет</a>
+</div>
+
+</body>
+</html>
+
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:th="http://www.thymeleaf.org"-->
+<!--      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">-->
+
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>User Information</title>-->
+<!--    <style>-->
+<!--        body {-->
+<!--            font-family: 'Arial', sans-serif;-->
+<!--            margin: 0;-->
+<!--            padding: 20px;-->
+<!--            background-color: #f4f4f4;-->
+<!--        }-->
+<!--        .container {-->
+<!--            max-width: 800px;-->
+<!--            margin: 0 auto;-->
+<!--            padding: 20px;-->
+<!--            background-color: #fff;-->
+<!--            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);-->
+<!--            border-radius: 8px;-->
+<!--        }-->
+<!--        h1 {-->
+<!--            color: #4CAF50;-->
+<!--            text-align: center;-->
+<!--        }-->
+<!--        .user-info {-->
+<!--            margin-top: 20px;-->
+<!--        }-->
+<!--        .user-info p {-->
+<!--            font-size: 18px;-->
+<!--            margin: 10px 0;-->
+<!--        }-->
+<!--        .user-info span {-->
+<!--            font-weight: bold;-->
+<!--            color: #333;-->
+<!--        }-->
+<!--    </style>-->
+<!--</head>-->
+
+<!--<body>-->
+<!--<div class="container">-->
+<!--    <h1>User Information</h1>-->
+
+<!--    <div class="user-info">-->
+<!--        <p><span>Username:</span> <span th:text="${username}">User Name</span></p>-->
+<!--        <p><span>Email:</span> <span th:text="${email}">user@example.com</span></p>-->
+<!--        <p><span>Roles:</span>-->
+<!--        <ul>-->
+<!--            <li th:each="role : ${roles}" th:text="${role}">ROLE_USER</li>-->
+<!--        </ul>-->
+<!--        </p>-->
+<!--    </div>-->
+
+<!--    <div class="footer">-->
+<!--        <a th:href="@{/logout}">Logout</a>-->
+<!--    </div>-->
+<!--</div>-->
+<!--</body>-->
+
+<!--</html>-->

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Перевод денежных средств</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .user-info, .user-list {
+            width: 40%;
+        }
+
+        .user-info {
+            text-align: left;
+        }
+
+        .user-info p {
+            margin: 10px 0;
+            color: #555;
+        }
+
+        .transfer-amount {
+            margin: 20px 0;
+        }
+
+        .transfer-amount input {
+            padding: 10px;
+            width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .arrow {
+            width: 10%;
+            text-align: center;
+            font-size: 2rem;
+            color: #333;
+        }
+
+        .user-list {
+            text-align: left;
+        }
+
+        .user-list select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .submit-btn {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .submit-btn button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 40px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 30px;
+        }
+
+        .submit-btn button:hover {
+            background-color: #0056b3;
+        }
+
+        .error-message {
+            color: red;
+            margin-top: 10px;
+        }
+
+        .back-btn {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .back-btn button {
+            background-color: #f44336;
+            color: white;
+            padding: 10px 40px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 30px;
+        }
+
+        .back-btn button:hover {
+            background-color: #e53935;
+        }
+
+    </style>
+</head>
+<body>
+
+<h1>Перевод денежных средств</h1>
+
+<div class="container">
+    <!-- Левая часть: Информация о пользователе -->
+    <div class="user-info">
+        <h3>Ваши данные</h3>
+        <p><strong>Имя:</strong> <span th:text="${user.username}"></span></p>
+        <p><strong>Номер счёта:</strong> <span th:text="${user.payId}"></span></p>
+        <p><strong>Баланс:</strong> <span th:text="${user.amount}"></span> руб.</p>
+
+        <!-- Поле ввода суммы для перевода -->
+        <div class="transfer-amount">
+            <label for="amount"><strong>Сумма перевода:</strong></label>
+            <input type="number" id="amount" placeholder="Введите сумму" required>
+        </div>
+    </div>
+
+    <!-- Стрелка -->
+    <div class="arrow">
+        ➡️
+    </div>
+
+    <!-- Правая часть: Список пользователей для перевода -->
+    <div class="user-list">
+        <h3>Выберите получателя</h3>
+        <select id="recipient" required>
+            <option th:each="recipient : ${recipients}"
+                    th:value="${recipient.id}"
+                    th:text="${recipient.username}">
+            </option>
+        </select>
+    </div>
+</div>
+
+<!-- Кнопка отправки формы -->
+<div class="submit-btn">
+    <a href="/profile" class="back-btn">
+        <button type="button">Назад</button>
+    </a>
+    <button type="button" onclick="submitTransfer()">Перевести</button>
+</div>
+
+<!-- Вывод ошибок -->
+<div class="error-message" id="error-message" th:if="${errorMessage}">
+    <p th:text="${errorMessage}"></p>
+</div>
+
+<script>
+    function submitTransfer() {
+        const transferAmount = document.getElementById('amount').value;
+        const recipientId = document.getElementById('recipient').value;
+        const fromUserId = [[${user.id}]];  // Убедимся, что Thymeleaf рендерит ID
+
+        const transferData = {
+            fromUserId: fromUserId,
+            recipientId: recipientId,
+            transferAmount: transferAmount
+        };
+
+        fetch('/transfer', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(transferData)
+        })
+            .then(response => {
+
+                if (response.ok) {
+                    // window.location.href = `/transfer/${fromUserId}/${recipientId}/${transferAmount}`;
+                    window.location.href = `/transfer`;
+                } else {
+                    return response.text().then(text => {
+                        document.getElementById('error-message').innerText = text;
+                    });
+                }
+            })
+            .catch(error => {
+                document.getElementById('error-message').innerText = "Ошибка при переводе средств.";
+            });
+    }
+</script>
+
+</body>
+</html>

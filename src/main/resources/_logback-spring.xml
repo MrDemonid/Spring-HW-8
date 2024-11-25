@@ -1,0 +1,44 @@
+<configuration>
+
+    <!-- Аппендер вывода на консоль -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <withJansi>true</withJansi>
+        <encoder>
+            <pattern>
+                %highlight(%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n)
+            </pattern>
+        </encoder>
+    </appender>
+
+    <!-- Аппендер вывода в файл. Файлы создаются каждый день с именем текущей даты.
+         Хранятся файлы максимум 30 дней. -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- Путь к файлу-->
+        <file>logs/application.log</file>
+        <!-- Политика ротации логов -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/application.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Логгер для вывода в консоль сообщений уровня INFO -->
+    <logger name="mr/demonid/spring/hw8" level="INFO" additivity="false">
+        <appender-ref ref="CONSOLE" />
+    </logger>
+    <!-- Логгер для вывода в файл сообщений уровня ERROR -->
+    <logger name="mr/demonid/spring/hw8" level="ERROR">
+        <appender-ref ref="FILE"/>
+    </logger>
+
+<!-- Рутовый логгер с уровнем DEBUG, выводит и на консоль и в файл -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE" />
+<!--        <appender-ref ref="FILE" />-->
+    </root>
+
+</configuration>
